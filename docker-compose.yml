@@ -1,0 +1,44 @@
+version: "3.5"
+services:
+  app:
+    build:
+      args:
+        user: homemaderecipe
+        uid: ${UID}
+      context: ./
+      dockerfile: Dockerfile
+    image: homemaderecipe
+    container_name: homemaderecipe-app
+    restart: unless-stopped
+    working_dir: /var/www/html/
+    entrypoint: sh /www/html/start.sh
+   environment:
+      - APACHE_RUN_USER=#${UID}
+      - APACHE_RUN_GROUP=#${UID}
+    volumes:
+      - .:/var/www/html
+    ports:
+      - 8000:80
+    networks:
+      backend:
+        aliases:
+          - homemaderecipe-app
+
+  db:
+    image: mysql:5.7
+    container_name: homemaderecipe-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_NAME: mysql
+    volumes:
+      - ./run/var:/var/lib/mysql
+    networks:
+      - homemaderecipe
+
+networks:
+  backend:
+    name: homemaderecipe-network
