@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Change present working directory
-# alias myproject="cd homemaderecipe-app"
+# alias myproject="cd /var/www/html/"
 # myproject
 
 # Show present working directory
